@@ -53,6 +53,10 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       _transactions.add(newTransaction);
     });
+
+    //Fechando o modal quando o formulário é submetido
+    //No caso, o context é o próprio modal
+    Navigator.of(context).pop();
   }
 
   _openTransacionFormModal(BuildContext context) {
