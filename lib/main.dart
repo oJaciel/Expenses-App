@@ -9,14 +9,35 @@ main() {
 }
 
 class ExpensesApp extends StatelessWidget {
-  const ExpensesApp({super.key});
+  final ThemeData tema = ThemeData();
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: MyHomePage(),
-    );
+        debugShowCheckedModeBanner: false,
+        home: MyHomePage(),
+        theme: tema.copyWith(
+          colorScheme: tema.colorScheme.copyWith(
+            primary: Colors.purple,
+            secondary: Colors.amber,
+          ),
+          textTheme: tema.textTheme.copyWith(
+            titleLarge: TextStyle(
+              fontFamily: 'OpenSans',
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
+          ),
+          appBarTheme: AppBarTheme(
+            titleTextStyle: TextStyle(
+              fontFamily: 'OpenSans',
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+        ));
   }
 }
 
@@ -72,9 +93,11 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.primary,
         title: const Text('Despesas Pessoais'),
         actions: [
           IconButton(
+            color: Theme.of(context).colorScheme.secondary,
             onPressed: () => _openTransacionFormModal(context),
             icon: const Icon(Icons.add),
           )
@@ -93,6 +116,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Theme.of(context).colorScheme.secondary,
         onPressed: () => _openTransacionFormModal(context),
         child: const Icon(Icons.add),
       ),
