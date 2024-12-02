@@ -97,23 +97,36 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final appBar = AppBar(
+      backgroundColor: Theme.of(context).colorScheme.primary,
+      title: const Text('Despesas Pessoais'),
+      actions: [
+        IconButton(
+          color: Theme.of(context).colorScheme.secondary,
+          onPressed: () => _openTransacionFormModal(context),
+          icon: const Icon(Icons.add),
+        )
+      ],
+    );
+
+    //Tamanho disponível = altura da tela - tamanho do appBar
+    final availableHeight = MediaQuery.of(context).size.height -
+        appBar.preferredSize.height -
+        MediaQuery.of(context).padding.top;
+
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        title: const Text('Despesas Pessoais'),
-        actions: [
-          IconButton(
-            color: Theme.of(context).colorScheme.secondary,
-            onPressed: () => _openTransacionFormModal(context),
-            icon: const Icon(Icons.add),
-          )
-        ],
-      ),
+      appBar: appBar,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Chart(_recentTransactions),
-          TransactionList(_transactions, _removeTransaction),
+          Container(
+            child: Chart(_recentTransactions),
+            height: availableHeight * 0.3,
+          ),
+          Container(
+            height: availableHeight * 0.7,
+            child: TransactionList(_transactions, _removeTransaction),
+          ),
         ],
       ),
       floatingActionButton: FloatingActionButton(

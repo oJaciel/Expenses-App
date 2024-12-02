@@ -15,12 +15,13 @@ Clone o repositório:
    git clone https://github.com/oJaciel/Expenses-App
    ```
 Instale as dependências:
-    ```bash
+    ```
     flutter pub get
     ```
+    
 
 Execute o aplicativo:
-    ```bash
+    ```
     flutter run
     ```
 
