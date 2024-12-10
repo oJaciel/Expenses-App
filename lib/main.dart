@@ -51,6 +51,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final List<Transaction> _transactions = [];
+  bool _showChart = false;
 
   List<Transaction> get _recentTransactions {
     return _transactions.where((tr) {
@@ -97,15 +98,28 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    bool isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
+
     final appBar = AppBar(
       backgroundColor: Theme.of(context).colorScheme.primary,
       title: const Text('Despesas Pessoais'),
       actions: [
+        if (isLandscape)
+          IconButton(
+            color: Theme.of(context).colorScheme.secondary,
+            onPressed: () {
+              setState(() {
+                _showChart = !_showChart;
+              });
+            },
+            icon: Icon(_showChart ? Icons.list : Icons.show_chart),
+          ),
         IconButton(
           color: Theme.of(context).colorScheme.secondary,
           onPressed: () => _openTransacionFormModal(context),
           icon: const Icon(Icons.add),
-        )
+        ),
       ],
     );
 
@@ -119,14 +133,16 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Container(
-            child: Chart(_recentTransactions),
-            height: availableHeight * 0.3,
-          ),
-          Container(
-            height: availableHeight * 0.7,
-            child: TransactionList(_transactions, _removeTransaction),
-          ),
+          if (_showChart == true || isLandscape == false)
+            Container(
+              child: Chart(_recentTransactions),
+              height: availableHeight * (isLandscape ? 0.7 : 0.3),
+            ),
+          if (!_showChart || isLandscape == false)
+            Container(
+              height: availableHeight * 0.7,
+              child: TransactionList(_transactions, _removeTransaction),
+            ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
