@@ -23,14 +23,14 @@ class ExpensesApp extends StatelessWidget {
             secondary: Colors.amber,
           ),
           textTheme: tema.textTheme.copyWith(
-            titleLarge: TextStyle(
+            titleLarge: const TextStyle(
               fontFamily: 'OpenSans',
               fontSize: 18,
               fontWeight: FontWeight.bold,
               color: Colors.black,
             ),
           ),
-          appBarTheme: AppBarTheme(
+          appBarTheme: const AppBarTheme(
             titleTextStyle: TextStyle(
               fontFamily: 'OpenSans',
               fontSize: 20,
@@ -57,7 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return _transactions.where((tr) {
       return tr.date.isAfter(
         DateTime.now().subtract(
-          Duration(days: 7),
+          const Duration(days: 7),
         ),
       );
     }).toList();
@@ -128,29 +128,35 @@ class _MyHomePageState extends State<MyHomePage> {
         appBar.preferredSize.height -
         MediaQuery.of(context).padding.top;
 
+        //Aqui fica o body
+        final bodyPage = SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  if (_showChart == true || isLandscape == false)
+                    Container(
+                      child: Chart(_recentTransactions),
+                      height: availableHeight * (isLandscape ? 0.7 : 0.3),
+                    ),
+                  if (!_showChart || isLandscape == false)
+                    Container(
+                      height: availableHeight * (isLandscape ? 1 : 0.7),
+                      child: TransactionList(_transactions, _removeTransaction),
+                    ),
+                ],
+              ),
+            );
+
     return Scaffold(
-      appBar: appBar,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          if (_showChart == true || isLandscape == false)
-            Container(
-              child: Chart(_recentTransactions),
-              height: availableHeight * (isLandscape ? 0.7 : 0.3),
-            ),
-          if (!_showChart || isLandscape == false)
-            Container(
-              height: availableHeight * (isLandscape ? 1 : 0.7),
-              child: TransactionList(_transactions, _removeTransaction),
-            ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Theme.of(context).colorScheme.secondary,
-        onPressed: () => _openTransacionFormModal(context),
-        child: const Icon(Icons.add),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-    );
+            appBar: appBar,
+            body: bodyPage,
+            floatingActionButton: FloatingActionButton(
+                    backgroundColor: Theme.of(context).colorScheme.secondary,
+                    onPressed: () => _openTransacionFormModal(context),
+                    child: const Icon(Icons.add),
+                  ),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
+          );
   }
 }
